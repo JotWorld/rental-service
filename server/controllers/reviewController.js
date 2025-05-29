@@ -1,8 +1,9 @@
-// server/controllers/reviewController.js
+
 import Review from '../models/review.js';
 import User from '../models/user.js';
 import Offer from '../models/offer.js';
-
+import ApiError from '../error/ApiError.js';
+import { adaptReviewToClient } from '../adapters/reviewAdapter.js';
 export const getAllReviews = async (req, res) => {
   try {
     const reviews = await Review.findAll({
@@ -60,3 +61,37 @@ export const deleteReview = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+export async function addReview(req, res, next) {
+  try {
+    const { offerId } = req.params;
+    const { text, rating, userId } = req.body;
+    if (!text || !rating || !offerId || !userId) {
+      return next(ApiError.badRequest('Некорректные данные для отзыва'));
+    }
+    const review = await Review.create({
+      text,
+      rating,
+      offerId,
+      authorId: userId
+    });
+    return res.status(201).json(review);
+  } catch (e) {
+    return next(ApiError.internal('Не удалось создать отзыв: ' + e.message));
+  }
+}
+
+
+
+export async function getReviewsByOfferId(req, res, next) {
+  try {
+    const { offerId } = req.params;
+    const reviews = await Review.findAll({
+      where: { offerId },
+      include: { model: User, as: 'author' }
+    });
+    const adapted = reviews.map(adaptReviewToClient);
+    return res.json(adapted);
+  } catch (e) {
+    return next(ApiError.internal('Не удалось получить отзывы: ' + e.message));
+  }
+}

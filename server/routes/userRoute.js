@@ -1,29 +1,18 @@
-// server/routes/userRoute.js
-
 import { Router } from 'express';
-import {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser
-} from '../controllers/userController.js';
+import upload from '../middleware/upload.js';
+import { registration, login, checkAuth, logout  } from '../controllers/userController.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
+
 
 const router = Router();
+router.post('/login', login);
+router.get('/login', authenticateToken, checkAuth);
+router.delete('/logout', logout);
+router.post(
+  '/register',      
+  upload.single('avatar'),
+  registration
+);
 
-// GET /users — получить всех пользователей
-router.get('/', getAllUsers);
-
-// GET /users/:id — получить пользователя по ID
-router.get('/:id', getUserById);
-
-// POST /users — создать нового пользователя
-router.post('/', createUser);
-
-// PUT /users/:id — обновить данные пользователя по ID
-router.put('/:id', updateUser);
-
-// DELETE /users/:id — удалить пользователя по ID
-router.delete('/:id', deleteUser);
 
 export default router;
