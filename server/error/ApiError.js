@@ -1,10 +1,9 @@
-// server/error/ApiError.js
 
 class ApiError extends Error {
   constructor(status, message) {
     super(message);
     this.status = status;
-    // чтобы V8 правильно отлавливал стек
+
     Error.captureStackTrace(this, this.constructor);
   }
 

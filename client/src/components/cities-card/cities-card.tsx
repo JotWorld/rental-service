@@ -1,22 +1,36 @@
-function CitiesCard() {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { AppRoute } from "../../const";
+
+type CitiesCardProps = {
+  id: string;
+  title: string;
+  type: 'apartment' | 'room' | 'house' | 'hotel';
+  price: number;
+  isPremium: boolean;
+  previewImage: string;
+  rating: number;
+};
+function CitiesCard({id, title, type, price, previewImage, isPremium, rating}: CitiesCardProps) {
+  const [,setOfferId] = useState('');
   return (
-    <article className="cities__card place-card">
+    <article className="cities__card place-card" onMouseOver={()=> setOfferId(id)} onMouseOut={()=>setOfferId('')}>
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+        <Link to ={`${AppRoute.Offer}/${id}`}>
           <img
             className="place-card__image"
-            src="img/apartment-01.jpg"
+            src={previewImage}
             width="260"
             height="200"
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
 
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">€120</b>
+            <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
 
@@ -31,7 +45,7 @@ function CitiesCard() {
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
             <span style={{ width: "80%" }}></span>
-            <span className="visually-hidden">Rating</span>
+            <span className="visually-hidden">{rating}</span>
           </div>
         </div>
 
@@ -39,7 +53,7 @@ function CitiesCard() {
           <a href="#">Beautiful &amp; luxurious apartment at great location</a>
         </h2>
 
-        <p className="place-card__type">Apartment</p>
+        <p className="place-card__type">{type}</p>
       </div>
     </article>
   );

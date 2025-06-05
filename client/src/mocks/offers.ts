@@ -1,0 +1,150 @@
+// src/mocks/offers.ts
+import { FullOffer } from '../types/offer';
+
+export const offers: FullOffer[] = [
+  {
+    id: '1',
+    title: 'Beautiful & luxurious apartment at great location',
+    type: 'apartment',
+    price: 120,
+    city: {
+      name: 'Paris',
+      location: {
+        latitude: 48.8566,
+        longitude: 2.3522,
+        zoom: 13,
+      },
+    },
+    location: {
+      latitude: 48.8570,
+      longitude: 2.3510,
+      zoom: 16,
+    },
+    isFavorite: false,
+    isPremium: true,
+    rating: 4.8,
+    description: 'A quiet cozy and picturesque apartment hiding behind a river by the unique lightness of Paris.',
+    bedrooms: 3,
+    goods: ['Wi-Fi', 'Heating', 'Kitchen', 'Cable TV'],
+    host: {
+      id: '100',
+      name: 'Angelina',
+      isPro: true,
+      avatarUrl: '/img/avatar-angelina.jpg',
+    },
+    images: [
+      '/img/apartment-01.jpg',
+      '/img/apartment-02.jpg',
+      '/img/apartment-03.jpg',
+    ],
+    maxAdults: 4,
+  },
+  {
+    id: '2',
+    title: 'Cozy private room in the city center',
+    type: 'room',
+    price: 50,
+    city: {
+      name: 'Cologne',
+      location: {
+        latitude: 50.9375,
+        longitude: 6.9603,
+        zoom: 13,
+      },
+    },
+    location: {
+      latitude: 50.9360,
+      longitude: 6.9610,
+      zoom: 16,
+    },
+    isFavorite: true,
+    isPremium: false,
+    rating: 4.2,
+    description: 'Comfortable private room for two minutes from the center.',
+    bedrooms: 1,
+    goods: ['Wi-Fi', 'Washing machine', 'Coffee machine'],
+    host: {
+      id: '101',
+      name: 'Maxim',
+      isPro: false,
+      avatarUrl: '/img/avatar-maxim.jpg',
+    },
+    images: [
+      '/img/room-1.jpg',
+      '/img/room-2.jpg',
+    ],
+    maxAdults: 2,
+  },
+  {
+    id: '3',
+    title: 'Spacious house with a beautiful garden',
+    type: 'house',
+    price: 200,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.3740,
+        longitude: 4.9000,
+        zoom: 13,
+      },
+    },
+    location: {
+      latitude: 52.3750,
+      longitude: 4.9100,
+      zoom: 16,
+    },
+    isFavorite: false,
+    isPremium: false,
+    rating: 4.5,
+    description: 'A large house perfect for families, situated near the green canals.',
+    bedrooms: 4,
+    goods: ['Washing machine', 'Dishwasher', 'Parking', 'Garden'],
+    host: {
+      id: '102',
+      name: 'Eva',
+      isPro: true,
+      avatarUrl: '/img/avatar-eva.jpg',
+    },
+    images: [
+      '/img/house-1.jpg',
+      '/img/house-2.jpg',
+    ],
+    maxAdults: 6,
+  },
+  {
+    id: '4',
+    title: 'Modern hotel room with city view',
+    type: 'hotel',
+    price: 90,
+    city: {
+      name: 'Brussels',
+      location: {
+        latitude: 50.8503,
+        longitude: 4.3517,
+        zoom: 13,
+      },
+    },
+    location: {
+      latitude: 50.8510,
+      longitude: 4.3520,
+      zoom: 16,
+    },
+    isFavorite: true,
+    isPremium: true,
+    rating: 4.9,
+    description: 'Clean and modern hotel room with a stunning view of the city.',
+    bedrooms: 1,
+    goods: ['Wi-Fi', 'Elevator', 'Breakfast'],
+    host: {
+      id: '103',
+      name: 'Oliver',
+      isPro: false,
+      avatarUrl: '/img/avatar-oliver.jpg',
+    },
+    images: [
+      '/img/hotel-1.jpg',
+      '/img/hotel-2.jpg',
+    ],
+    maxAdults: 2,
+  },
+];

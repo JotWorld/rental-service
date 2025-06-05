@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 const staticDir  = path.resolve(__dirname, '..', 'static');
 
-// создаём папку, если её нет
+
 if (!fs.existsSync(staticDir)) fs.mkdirSync(staticDir);
 
 const storage = multer.diskStorage({
