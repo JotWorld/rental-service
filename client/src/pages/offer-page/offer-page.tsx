@@ -1,26 +1,27 @@
-// src/pages/offer-page/offer-page.tsx
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { FullOffer } from '../../types/offer';
+import { reviews } from '../../mocks/reviews';
+import { ReviewList } from '../../components/review-list/review-list';
 import Logo from '../../components/logo/logo';
 import { AppRoute } from '../../const';
-import ReviewForm from '../../components/review-form/review-form';
+import Map from '../../components/map/map';
+import { CitiesCard } from '../../components/cities-card/cities-card';
 
 type OfferProps = {
   offers: FullOffer[];
 };
 
 export const OfferPage: React.FC<OfferProps> = ({ offers }) => {
-  // Получаем id из параметров URL
   const { id } = useParams<{ id: string }>();
-  
-  // Находим предложение по id
   const offer = offers.find((item) => item.id === id);
 
-  // Если предложение не найдено, перенаправляем на страницу NotFound
   if (!offer) {
     return <Navigate to={AppRoute.NotFound} />;
   }
+
+const nearbyOffers = offers.filter((item) => item.id !== id && item.city.name === offer.city.name).slice(0, 3);
+
 
   const {
     title,
@@ -75,7 +76,7 @@ export const OfferPage: React.FC<OfferProps> = ({ offers }) => {
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
                   <span style={{ width: `${(rating / 5) * 100}%` }}></span>
-                  <span className="visually-hidden">{rating}</span>
+                  <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{rating}</span>
               </div>
@@ -116,13 +117,12 @@ export const OfferPage: React.FC<OfferProps> = ({ offers }) => {
                 </div>
               </div>
 
-              {/* Вставляем форму для отправки комментария */}
-              <ReviewForm />
+              <ReviewList reviews={reviews} />
             </div>
           </div>
 
           <section className="offer__map map">
-            {/* Здесь можно отображать карту */}
+            <Map offers={nearbyOffers} activeOfferId={''} />
           </section>
         </section>
 
@@ -130,7 +130,18 @@ export const OfferPage: React.FC<OfferProps> = ({ offers }) => {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {/* Здесь можно использовать CitiesCard для отображения похожих предложений */}
+              {nearbyOffers.map((offer) => (
+                <CitiesCard
+                  key={offer.id}
+                  id={offer.id}
+                  title={offer.title}
+                  type={offer.type}
+                  price={offer.price}
+                  isPremium={offer.isPremium}
+                  previewImage={offer.images[0]}
+                  rating={offer.rating}
+                />
+              ))}
             </div>
           </section>
         </div>

@@ -1,15 +1,22 @@
-// src/pages/main-page/main-page.tsx
-import React from 'react';
-import { FullOffer } from '../../types/offer';
+import React, { useState } from 'react';
+import { useAppSelector } from '../../hooks';
 import { CitiesCard } from '../../components/cities-card/cities-card';
 import Logo from '../../components/logo/logo';
+import Map from '../../components/map/map';
+import CityList from '../../components/city-list/city-list';
+import SortOptions from '../../components/sort-options/sort-options';
+import { sortOffers } from '../../utils';
 
-type MainPageProps = {
-  rentalOffersCount: number;
-  offers: FullOffer[];  // Массив предложений, передаваемый как пропс
-};
+export const MainPage: React.FC = () => {
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
-export const MainPage: React.FC<MainPageProps> = ({ rentalOffersCount, offers }) => {
+  const selectedCity = useAppSelector((state) => state.city);
+  const sortType = useAppSelector((state) => state.sortType);
+  const offers = useAppSelector((state) => state.offers);
+
+  const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
+  const sortedOffers = sortOffers(filteredOffers, sortType);
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -41,38 +48,7 @@ export const MainPage: React.FC<MainPageProps> = ({ rentalOffersCount, offers })
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active" href="#">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
+            <CityList />
           </section>
         </div>
 
@@ -81,48 +57,36 @@ export const MainPage: React.FC<MainPageProps> = ({ rentalOffersCount, offers })
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">
-                {rentalOffersCount} places to stay in Amsterdam
+                {sortedOffers.length} places to stay in {selectedCity}
               </b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use href="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>
-                    Popular
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: low to high
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: high to low
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Top rated first
-                  </li>
-                </ul>
-              </form>
+
+              <SortOptions />
+
               <div className="cities__places-list places__list tabs__content">
-                {offers.map((offer) => (
-                  <CitiesCard
+                {sortedOffers.map((offer) => (
+                  <div
                     key={offer.id}
-                    id={offer.id}
-                    title={offer.title}
-                    type={offer.type}
-                    price={offer.price}
-                    isPremium={offer.isPremium}
-                    previewImage={offer.images[0]} // Используем первое изображение для предпросмотра
-                    rating={offer.rating}
-                  />
+                    onMouseEnter={() => setActiveOfferId(offer.id)}
+                    onMouseLeave={() => setActiveOfferId(null)}
+                  >
+                    <CitiesCard
+                      id={offer.id}
+                      title={offer.title}
+                      type={offer.type}
+                      price={offer.price}
+                      isPremium={offer.isPremium}
+                      previewImage={offer.images[0]}
+                      rating={offer.rating}
+                    />
+                  </div>
                 ))}
               </div>
             </section>
+
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map offers={sortedOffers} activeOfferId={activeOfferId} />
+              </section>
             </div>
           </div>
         </div>
